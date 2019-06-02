@@ -1,0 +1,8 @@
+﻿<h2>@Model.CurrentCategory</h2>
+
+@{
+    foreach (Event e in Model.Events)
+    {
+        @Html.Partial("EventsSummary", e);
+    }
+}

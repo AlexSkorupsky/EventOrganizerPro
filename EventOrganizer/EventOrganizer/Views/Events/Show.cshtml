@@ -1,0 +1,51 @@
+﻿@model Event
+
+<div class="container-fluid">
+    <div class="image-container" style="background-image: url(@Model.ImageUrl);">
+        <div class="text">@Model.Name</div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 style="text-align:center"><b>@Model.Name</b></h1>
+
+            <br />
+            <h2><b>Starts: @Model.ScheduledAt.ToLongDateString() in @Model.ScheduledAt.ToShortTimeString()</b></h2>
+            <h2>@Model.ShortDescription</h2>
+            <h2>Visit for free!</h2>
+            <br />
+            <h2>On this event you: @Model.LongDescription description</h2>
+        </div>
+        <div class="col-sm-4">
+            @if (User.IsInRole("User") || User.IsInRole("Official") || User.IsInRole("Admin"))
+            {
+                <div class="row">
+                    <div style="text-align: center">
+                        @using (Html.BeginForm("AddToEventCart", "EventCartItems", Model))
+                        {
+                            <input type="submit" value="Like" class="delete" style="background-color:deeppink;font-size: 25px;width:90%;margin:15px;" />
+                        }
+                    </div>
+                </div>
+            }
+            @if (User.IsInRole("Official") || User.IsInRole("Admin"))
+            {
+                @if (UserManager.GetUserId(User) == Model.UserId)
+                {
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <a id="registerLink" asp-controller="Events" asp-action="Edit" asp-route-id="@Model.Id">
+                                <input type="submit" value="Edit" class="edit" style="background-color:dodgerblue;font-size: 25px;width:90%;margin:15px;" />
+                            </a>
+                        </div>
+                        <div class="col-lg-6">
+                            <form asp-controller="Events" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                                <input id="registerLink" type="submit" value="Delete" class="delete" style="background-color:tomato;font-size: 25px;width:90%;margin:15px;" />
+                            </form>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
